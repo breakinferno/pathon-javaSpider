@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cli.mapper.WxNumMapper">
+
+	<!-- 查询总的页数 -->
+	<select id="findAllPage" resultType="int">
+		select count(*) from wxnum;
+	</select>
+	<!-- 根据总的公众号 -->
+	<select id="findAllWxNum" parameterType="int" resultType="WxNum">
+		<!-- select * from table limit (start-1)*limit,limit; 其中start是页码，limit是每页显示的条数 -->
+		select * from WxNum limit #{offset},10;
+	</select>
+	
+	<!-- 查询省级总的页数 -->
+	<select id="findAllProLevelPageNum" parameterType="String" resultType="int">
+		select count(*) from wxnum where level=#{level};
+	</select>
+	<!-- 根据省级分页查询公众号 -->
+	<select id="findWxNumByProLevel" parameterType="Page" resultType="WxNum">
+		select * from WxNum where level=#{level} limit #{offset},10
+	</select>
+	
+	<!-- 查询省级总的页数 -->
+	<select id="findAllNotProLevelPageNum" parameterType="String" resultType="int">
+		select count(*) from wxnum where level !=#{level};
+	</select>
+	<!-- 查询非省级公众号 -->
+	<select id="findWxNumNotProLevel" parameterType="Page" resultType="WxNum">
+		select * from WxNum where level !=#{level} limit #{offset},10
+	</select>
+	
+	<!-- 根据微信号修改link-->
+	<update id="updateLinkByWxNum" parameterType="WxNum">
+		update wxnum set wx_num_link=#{wx_num_link} where wx_num=#{wx_num}
+	</update>
+	
+	<!-- 根据微信号修改level等级 -->
+	<update id="updateLevelByWxNum" parameterType="WxNum">
+		update wxnum set level=#{level} where wx_num=#{wx_num}
+	</update>
+	<delete id="deleteWxNum" parameterType="String">
+		delete from wxnum where wx_num=#{wx_num}
+	</delete>
+	
+	<select id="getGZHNumIndex" parameterType="IndexDto" resultType="int">
+    SELECT count(wx_num)
+	FROM wxnum
+	WHERE keyword = #{keyword}
+	<if test="level != null">
+	    AND `level`=#{level}
+	</if>
+  </select>
+	
+</mapper>

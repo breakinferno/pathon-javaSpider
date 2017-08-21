@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cli.mapper.ArticleMapper">
+
+	
+	<select id="findArticleById" parameterType="int" resultType="Article">
+		select * from article where article_id=#{article_id};
+	</select>
+	<!-- 查询总页数 -->
+	<select id="getAllPageNum" resultType="int">
+		select count(*) from article
+	</select>
+	<select id="findAllArticle" parameterType="int" resultType="Article">
+		<!-- select * from table limit (start-1)*limit,limit; 其中start是页码，limit是每页显示的条数 -->
+		select * from Article limit #{offset},10;
+	</select>
+	<!-- 查询满足条件的总页数 -->
+	<select id="getAllPageNumInTitle" parameterType="String" resultType="int">
+		select count(*) from Article where article_title like concat('%',concat(#{title},'%'));
+	</select>
+	
+	<select id="findArticleByTitle" parameterType="String" resultType="Article">
+		select * from Article where article_title like concat('%',concat(#{title},'%'));
+	</select>
+	<update id="updateCategoryById" parameterType="Article">
+		update article set category=#{category},admin_confirm =1 where article_id=#{article_id};
+	</update>
+	<select id="getKeyWord" resultType="String">
+		select distinct  keyword from article
+	</select>
+	
+	<delete id="deleteArticle" parameterType="int">
+		delete from article where article_id=#{article_id}
+	</delete>
+	<!-- 获取正负项的页数 -->
+	<select id="getAllPageNumInCategory" parameterType="String" resultType="int">
+		select count(*) from article where category=#{level}
+	</select>
+	<!-- 根据正负项查询 -->
+	<select id="findArticleByCategory" parameterType="Page" resultType="Article">
+		select * from article where category=#{level} limit #{offset},10;
+	</select>
+	
+	<select id="getArticleNumIndex" parameterType="IndexDto" resultType="int">
+    SELECT count(article_id)
+	FROM article
+	WHERE keyword = #{keyword}
+	<if test="level != null">
+	    AND category=#{level}
+	</if>
+  </select>
+</mapper>

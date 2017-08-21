@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cli.mapper.ArticlesMapper">
+	<insert id="insertArticles" parameterType="Article">
+		insert into
+		articles
+		(article_title,article_url,article_abstract,article_time,article_gzh_name,article_gzh_url,article_gzh_headimg,add_time,category)
+		values
+		(#{article_title},#{article_url},#{article_abstract},#{article_time},#{article_gzh_name},#{article_gzh_url},#{article_gzh_headimg},#{add_time},#{category});
+	</insert>
+</mapper>
+
